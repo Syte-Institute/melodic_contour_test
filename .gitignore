@@ -3,7 +3,7 @@ videos/
 tmp_video_frames/
 *.mp4
 *.gif
-*.png
+# *.png
 *.jpg
 *.json
 *.pptx
