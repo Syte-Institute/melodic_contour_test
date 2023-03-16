@@ -1,0 +1,8 @@
+name: mci
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - fluidsynth
+  - pydub
+prefix: /Users/zhoulinn/miniforge3/envs/mci_test
