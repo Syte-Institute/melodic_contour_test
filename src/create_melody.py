@@ -1,16 +1,18 @@
+#!python
+
 import re
-import pyfluidsynth
+from fluidsynth import fluidsynth
 from midiutil import MIDIFile
 from pydub import AudioSegment
 import os
 
 import sys
 
-sys.path.append("/Users/zhoulinn/miniforge3/envs/mci/")
+sys.path.append("/Users/zhoulinn/miniforge3/envs/mci/lib/python3.10/site-packages/")
 
 # Load soundfont file
 sf2_path = "FluidR3_GM/FluidR3_GM.sf2"
-fs = pyfluidsynth.Synth()
+fs = fluidsynth.Synth()
 fs.start(driver="coreaudio")
 sf_id = fs.sfload(sf2_path)
 
