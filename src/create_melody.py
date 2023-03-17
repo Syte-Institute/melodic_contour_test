@@ -1,14 +1,14 @@
-#!python
+#### create a audio file with panio sound using given letter notes ####
 
 import re
-from fluidsynth import fluidsynth
+import fluidsynth
 from midiutil import MIDIFile
 from pydub import AudioSegment
 import os
 
-import sys
 
-sys.path.append("/Users/zhoulinn/miniforge3/envs/mci/lib/python3.10/site-packages/")
+# load notes to be played
+notes = "data/notes/piano_1.txt"
 
 # Load soundfont file
 sf2_path = "FluidR3_GM/FluidR3_GM.sf2"
@@ -16,13 +16,13 @@ fs = fluidsynth.Synth()
 fs.start(driver="coreaudio")
 sf_id = fs.sfload(sf2_path)
 
-# Set piano instrument as default
+# # Set piano instrument as default
 piano_program = 0
-fs.program_select(0, sf_id, piano_program)
+fs.program_select(0, sf_id, 0, piano_program)
 
 # Parse notes from text file
-note_pattern = r"([A-G])([0-9])"
-with open("notes.txt", "r") as f:
+note_pattern = r"[A-G](?:[0-9])?"
+with open(notes, "r") as f:
     notes_str = f.read()
 notes_list = re.findall(note_pattern, notes_str)
 

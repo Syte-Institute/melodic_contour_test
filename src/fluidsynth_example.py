@@ -1,5 +1,5 @@
 import time
-from fluidsynth import fluidsynth
+import fluidsynth
 
 fs = fluidsynth.Synth()
 fs.start()
