@@ -20,6 +20,10 @@ For example, install using homebrew:
 Alternatively, skip steps 2 and 3, create conda environment with .yml file:
 ```conda env create -f environment.yml```
 
+4. Download sounfront file "FluidR3_GM" and save it under 
+```./data/FluidR3_GM```
+
+5. Create json file ```./path.json``` with path to data folder ```./data```
 
 ### Fix ImportError: Couldn't find the FluidSynth library.
 If you get "ImportError: Couldn't find the FluidSynth library." while importing fluidsynth, it is probably because the find_library method couldn't find the fluidsynth library in homebrew dictionary.
