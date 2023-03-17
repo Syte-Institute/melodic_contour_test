@@ -51,19 +51,24 @@ for note, octave in notes_list:
     midi_file.addNote(track, channel, pitch, time, duration, volume)
     time += duration
 
+# Create output path if not exists
+output_dir = os.path.join(data_base_path, "sound_output")
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
 # Write MIDI file to disk
-midi_file_path = os.path.join(data_base_path, "sound_output", f"{melody_name}.mid")
+midi_file_path = os.path.join(output_dir, f"{melody_name}.mid")
 "output.mid"
 with open(midi_file_path, "wb") as f:
     midi_file.writeFile(f)
 
 # Convert MIDI to audio
-wav_file_path = os.path.join(data_base_path, "sound_output", f"{melody_name}.wav")
+wav_file_path = os.path.join(output_dir, f"{melody_name}.wav")
 cmd = f"fluidsynth -ni {sf2_path} {midi_file_path} -F {wav_file_path} -r 44100"
 os.system(cmd)
 
 # Load audio file and play it
 audio = AudioSegment.from_wav(wav_file_path)
 audio.export(
-    os.path.join(data_base_path, "sound_output", f"{melody_name}.mp3"), format="mp3"
+    os.path.join(output_dir, f"{melody_name}.mp3"), format="mp3"
 )
