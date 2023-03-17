@@ -7,9 +7,11 @@ from pydub import AudioSegment
 import os
 import json
 
+from utils import note_to_midi
+
 
 # select melody to create
-melody_name = "piano_1"
+melody_name = "happy_birthday"
 
 # load data path
 with open("path.json") as json_file:
@@ -29,11 +31,10 @@ sf_id = fs.sfload(sf2_path)
 piano_program = 0
 fs.program_select(0, sf_id, 0, piano_program)
 
-# Parse notes from text file
-note_pattern = r"[A-G](?:[0-9])?"
+# Parse notes from text file and convert to midi number
 with open(notes, "r") as f:
-    notes_str = f.read()
-notes_list = re.findall(note_pattern, notes_str)
+    notes_list = f.read().split()
+midi_numbers = note_to_midi(notes_list)
 
 # Set up MIDI file
 midi_file = MIDIFile(1)
@@ -46,9 +47,8 @@ midi_file.addTempo(track, time, tempo)
 channel = 0
 volume = 100
 duration = 1
-for note, octave in notes_list:
-    pitch = ord(note) - ord("A") + (int(octave) + 1) * 12
-    midi_file.addNote(track, channel, pitch, time, duration, volume)
+for midi_num in midi_numbers:
+    midi_file.addNote(track, channel, midi_num, time, duration, volume)
     time += duration
 
 # Create output path if not exists
@@ -69,6 +69,4 @@ os.system(cmd)
 
 # Load audio file and play it
 audio = AudioSegment.from_wav(wav_file_path)
-audio.export(
-    os.path.join(output_dir, f"{melody_name}.mp3"), format="mp3"
-)
+audio.export(os.path.join(output_dir, f"{melody_name}.mp3"), format="mp3")
