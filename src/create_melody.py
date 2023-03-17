@@ -5,13 +5,22 @@ import fluidsynth
 from midiutil import MIDIFile
 from pydub import AudioSegment
 import os
+import json
 
+
+# select melody to create
+melody_name = "piano_1"
+
+# load data path
+with open("path.json") as json_file:
+    paths = json.load(json_file)
+data_base_path = paths["data"]
 
 # load notes to be played
-notes = "data/notes/piano_1.txt"
+notes = os.path.join(data_base_path, "notes", f"{melody_name}.txt")
 
 # Load soundfont file
-sf2_path = "FluidR3_GM/FluidR3_GM.sf2"
+sf2_path = os.path.join(data_base_path, "FluidR3_GM", "FluidR3_GM.sf2")
 fs = fluidsynth.Synth()
 fs.start(driver="coreaudio")
 sf_id = fs.sfload(sf2_path)
@@ -43,15 +52,18 @@ for note, octave in notes_list:
     time += duration
 
 # Write MIDI file to disk
-midi_file_path = "output.mid"
+midi_file_path = os.path.join(data_base_path, "sound_output", f"{melody_name}.mid")
+"output.mid"
 with open(midi_file_path, "wb") as f:
     midi_file.writeFile(f)
 
 # Convert MIDI to audio
-wav_file_path = "output.wav"
+wav_file_path = os.path.join(data_base_path, "sound_output", f"{melody_name}.wav")
 cmd = f"fluidsynth -ni {sf2_path} {midi_file_path} -F {wav_file_path} -r 44100"
 os.system(cmd)
 
 # Load audio file and play it
 audio = AudioSegment.from_wav(wav_file_path)
-audio.export("output.mp3", format="mp3")
+audio.export(
+    os.path.join(data_base_path, "sound_output", f"{melody_name}.mp3"), format="mp3"
+)
