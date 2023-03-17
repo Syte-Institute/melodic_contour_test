@@ -40,3 +40,9 @@ The path of fluidsynth then would be ```/opt/homebrew/opt/fluid-synth/lib/libflu
     )
 ```
 After that line, add a new line lib = ```<path>``` with the path from step 1.
+
+
+### Fix fluidsynth: error: Unknown integer parameter 'synth.sample-rate'
+1. Open the "fluidsynth.py" file that is being imported
+2. Go to ```class Synth```
+3. Change the default ```samplerate=44100``` into ```samplerate=44100.0```
