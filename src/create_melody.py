@@ -14,6 +14,11 @@ def make_melody(data_base_path, melody_name):
     # load notes to be played
     notes = os.path.join(data_base_path, "notes", f"{melody_name}.txt")
 
+    # Parse notes from text file and convert to midi number
+    with open(notes, "r") as f:
+        notes_list = f.read().split()
+    midi_numbers = note_to_midi(notes_list)
+
     # Load soundfont file
     sf2_path = os.path.join(data_base_path, "FluidR3_GM", "FluidR3_GM.sf2")
     fs = fluidsynth.Synth()
@@ -30,11 +35,6 @@ def make_melody(data_base_path, melody_name):
     time = 0
     tempo = 120
     midi_file.addTempo(track, time, tempo)
-
-    # Parse notes from text file and convert to midi number
-    with open(notes, "r") as f:
-        notes_list = f.read().split()
-    midi_numbers = note_to_midi(notes_list)
 
     # Add notes to MIDI file
     channel = 0
@@ -66,7 +66,6 @@ def make_melody(data_base_path, melody_name):
 
 
 if __name__ == "__main__":
-
     # load data path
     with open("path.json") as json_file:
         paths = json.load(json_file)
