@@ -7,6 +7,8 @@ from pydub import AudioSegment
 import os
 import json
 
+from utils import note_to_midi
+
 
 def make_melody(data_base_path, melody_name):
     # load notes to be played
@@ -35,31 +37,44 @@ def make_melody(data_base_path, melody_name):
     tempo = 120
     midi_file.addTempo(track, time, tempo)
 
-    # Add notes to MIDI file
-    channel = 0
-    volume = 100
-    duration = 1
-    for note, octave in notes_list:
-        pitch = ord(note) - ord("A") + (int(octave) + 1) * 12
-        midi_file.addNote(track, channel, pitch, time, duration, volume)
-        time += duration
-
+    # Parse notes from text file and convert to midi number
+    with open(notes, "r") as f:
+        notes_list = f.read().split()
+    midi_numbers = note_to_midi(notes_list)
+    
     # Write MIDI file to disk
     midi_file_path = os.path.join(data_base_path, "sound_output", f"{melody_name}.mid")
     "output.mid"
     with open(midi_file_path, "wb") as f:
         midi_file.writeFile(f)
 
+    # Add notes to MIDI file
+    channel = 0
+    volume = 100
+    duration = 1
+    for midi_num in midi_numbers:
+        midi_file.addNote(track, channel, midi_num, time, duration, volume)
+        time += duration
+
+    # Create output path if not exists
+    output_dir = os.path.join(data_base_path, "sound_output")
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    # Write MIDI file to disk
+    midi_file_path = os.path.join(output_dir, f"{melody_name}.mid")
+    "output.mid"
+    with open(midi_file_path, "wb") as f:
+        midi_file.writeFile(f)
+
     # Convert MIDI to audio
-    wav_file_path = os.path.join(data_base_path, "sound_output", f"{melody_name}.wav")
+    wav_file_path = os.path.join(output_dir, f"{melody_name}.wav")
     cmd = f"fluidsynth -ni {sf2_path} {midi_file_path} -F {wav_file_path} -r 44100"
     os.system(cmd)
 
     # Load audio file and play it
     audio = AudioSegment.from_wav(wav_file_path)
-    audio.export(
-        os.path.join(data_base_path, "sound_output", f"{melody_name}.mp3"), format="mp3"
-    )
+    audio.export(os.path.join(output_dir, f"{melody_name}.mp3"), format="mp3")
 
 
 if __name__ == "__main__":
