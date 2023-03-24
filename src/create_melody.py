@@ -24,12 +24,6 @@ def make_melody(data_base_path, melody_name):
     piano_program = 0
     fs.program_select(0, sf_id, 0, piano_program)
 
-    # Parse notes from text file
-    note_pattern = r"[A-G](?:[0-9])?"
-    with open(notes, "r") as f:
-        notes_str = f.read()
-    notes_list = re.findall(note_pattern, notes_str)
-
     # Set up MIDI file
     midi_file = MIDIFile(1)
     track = 0
@@ -41,12 +35,6 @@ def make_melody(data_base_path, melody_name):
     with open(notes, "r") as f:
         notes_list = f.read().split()
     midi_numbers = note_to_midi(notes_list)
-    
-    # Write MIDI file to disk
-    midi_file_path = os.path.join(data_base_path, "sound_output", f"{melody_name}.mid")
-    "output.mid"
-    with open(midi_file_path, "wb") as f:
-        midi_file.writeFile(f)
 
     # Add notes to MIDI file
     channel = 0
@@ -84,5 +72,12 @@ if __name__ == "__main__":
         paths = json.load(json_file)
     data_base_path = paths["data"]
 
-    for melody_name in ["rise_fall", "rise", "fall"]:
+    melody_names = []
+    for contour in ["rise", "fall", "rise_fall", "fall_rise"]:
+        for semitone in ["1", "2", "4"]:
+            melody_names.append(f"mci_{contour}_{semitone}")
+    for note in ["A3", "F5", "G4"]:
+        melody_names.append(f"mci_flat_{note}")
+
+    for melody_name in melody_names:
         make_melody(data_base_path, melody_name)
