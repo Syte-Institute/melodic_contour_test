@@ -25,6 +25,15 @@ Alternatively, skip steps 2 and 3, create conda environment with .yml file:
 
 5. Create json file ```./path.json``` with path to data folder ```./data```
 
+## Create melody from text
+Save melody to ./data/notes/{melody_name}.txt \
+Refer to the exsiting examples in this folder for the format of the letter notes. 
+
+Run script ```./src/create_melody.py``` to create audio files with the selected melody.
+
+## Debugging
+It is very likely that you will entounter bugs. Below are solutions to the common issues.
+
 ### Fix ImportError: Couldn't find the FluidSynth library.
 If you get "ImportError: Couldn't find the FluidSynth library." while importing fluidsynth, it is probably because the find_library method couldn't find the fluidsynth library in homebrew dictionary.
 
